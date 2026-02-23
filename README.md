@@ -1,19 +1,19 @@
 # Intercede - Daily Intercessory Prayer
 
 > *"I urge that supplications, prayers, intercessions, and thanksgivings*
-> *be made for all people..." — 1 Timothy 2:1 (ESV)*
+> *be made for all people..." -- 1 Timothy 2:1 (ESV)*
 
 An AI-powered prayer companion that fetches the top 3 news headlines each day,
 reasons over them theologically, and generates Reformed Christian intercessory
 prayers complete with relevant ESV Scripture.
 
-## Diagram
+## Flow Diagram
 
 ```mermaid
 sequenceDiagram
     actor User
-    participant FE as Frontend<br/>(Vite · localhost:5173)
-    participant BE as Backend<br/>(FastAPI · localhost:8000)
+    participant FE as Frontend<br/>(Vite - localhost:5173)
+    participant BE as Backend<br/>(FastAPI - localhost:8000)
     participant RSS as Google News<br/>RSS Feed
     participant AI as OpenAI<br/>gpt-4o-mini
 
@@ -32,34 +32,51 @@ sequenceDiagram
 
 ```text
 intercede/
-├── backend/              # Python FastAPI
-│   ├── app.py            # API routes
-│   ├── news_service.py   # Google News RSS -> top 3 headlines
-│   ├── prayer_service.py # OpenAI -> Reformed prayers
-│   └── requirements.txt
-└── frontend/             # Vite (vanilla JS)
-    ├── index.html
-    └── src/
-        ├── main.js
-        ├── api.js
-        ├── newsCard.js
-        ├── prayerCard.js
-        └── style.css
++-- backend/              # Python FastAPI
+|   +-- .venv/            # Python virtual environment
+|   +-- app.py            # API routes
+|   +-- news_service.py   # Google News RSS -> top 3 headlines
+|   +-- prayer_service.py # OpenAI -> Reformed prayers
+|   +-- requirements.txt
++-- frontend/             # Vite (vanilla JS)
+|   +-- index.html
+|   +-- src/
+|       +-- main.js
+|       +-- api.js
+|       +-- newsCard.js
+|       +-- prayerCard.js
+|       +-- style.css
++-- start_app.ps1         # Launch both services (PowerShell)
 ```
 
-## Setup
+## Quick Start
 
-### 1. Add your OpenAI key
+The easiest way to run both services at once:
+
+```bash
+.\start_app.ps1
+```
+
+This opens two titled terminal windows:
+
+- **Intercede - Backend** at `http://localhost:8000`
+- **Intercede - Frontend** at `http://localhost:5173`
+
+## Manual Setup
+
+### Step 1 - Add your OpenAI key
 
 ```bash
 cp .env.example .env
 # Then edit .env and add your OPENAI_API_KEY
 ```
 
-### 2. Backend
+### Step 2 - Backend
 
 ```bash
 cd backend
+python -m venv .venv
+.venv\Scripts\Activate.ps1
 pip install -r requirements.txt
 uvicorn app:app --reload --port 8000
 ```
@@ -69,7 +86,7 @@ The API will be at `http://localhost:8000`.
 - `GET /api/health` - health check
 - `GET /api/prayers` - fetch headlines + generate prayers
 
-### 3. Frontend
+### Step 3 - Frontend
 
 ```bash
 cd frontend
@@ -79,7 +96,7 @@ npm run dev
 
 Open `http://localhost:5173` in your browser.
 
-## How it works
+## How It Works
 
 1. **News**: Google News Top Stories RSS is parsed for the top 3 US headlines
    (free, no API key required).
