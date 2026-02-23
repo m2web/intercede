@@ -7,6 +7,27 @@ An AI-powered prayer companion that fetches the top 3 news headlines each day,
 reasons over them theologically, and generates Reformed Christian intercessory
 prayers complete with relevant ESV Scripture.
 
+## Diagram
+
+```mermaid
+sequenceDiagram
+    actor User
+    participant FE as Frontend<br/>(Vite · localhost:5173)
+    participant BE as Backend<br/>(FastAPI · localhost:8000)
+    participant RSS as Google News<br/>RSS Feed
+    participant AI as OpenAI<br/>gpt-4o-mini
+
+    User->>FE: Click "Generate Prayers"
+    FE->>BE: GET /api/prayers
+    BE->>RSS: Fetch Top Stories RSS
+    RSS-->>BE: XML feed (top 3 headlines)
+    BE->>AI: System prompt + headlines (JSON mode)
+    Note over AI: Generates ESV verse,<br/>reflection & prayer<br/>per headline
+    AI-->>BE: JSON {prayers: [...]}
+    BE-->>FE: {prayers: [{title, link, esv_verse,<br/>reflection, prayer}, ...]}
+    FE-->>User: Render News + Prayer cards
+```
+
 ## Architecture
 
 ```text
