@@ -1,0 +1,16 @@
+# Python
+.env
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+
+# Node / Vite
+node_modules/
+frontend/dist/
+frontend/.env
+
+# IDE
+.vscode/
+.idea/
+*.swp
