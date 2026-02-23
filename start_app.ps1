@@ -11,6 +11,7 @@ Start-Process powershell -ArgumentList @(
     "-Command",
     "& { `$host.UI.RawUI.WindowTitle = 'Intercede - Backend'; " +
     "cd '$root\backend'; " +
+    ".\.venv\Scripts\Activate.ps1; " +
     "Write-Host 'Backend starting on http://localhost:8000' -ForegroundColor Green; " +
     "uvicorn app:app --reload --port 8000 }"
 )
