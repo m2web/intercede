@@ -87,7 +87,7 @@ function render() {
     <div class="logo-mark"><span class="dot"></span> Intercede</div>
     <h1>Daily Intercessory Prayer</h1>
     <p class="tagline">Reasoning over today's headlines to lift up the world in prayer.</p>
-    <button class="refresh-btn" id="refreshBtn" disabled>
+    <button class="refresh-btn" id="refreshBtn">
       ${refreshIcon(isLoading)}
       ${isLoading ? 'Generating prayers…' : 'Refresh Prayers'}
     </button>
@@ -179,6 +179,5 @@ async function loadPrayers() {
 
 // Boot
 render();
-// Restore any existing cooldown before auto-fetching
+// Restore any existing cooldown (disables button if still within 30-min window)
 if (cooldownRemaining() > 0) applyCooldownToButton();
-loadPrayers();
