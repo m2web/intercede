@@ -56,7 +56,7 @@ def generate_prayers(headlines: list[dict]) -> list[dict]:
             {"role": "user", "content": user_message},
         ],
         temperature=0.75,
-        max_tokens=4096,
+        max_tokens=8192,
         response_format={"type": "json_object"},
     )
 
