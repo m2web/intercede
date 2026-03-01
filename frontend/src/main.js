@@ -162,19 +162,42 @@ function renderPrayers(prayers) {
 async function loadPrayers() {
   if (isLoading) return;
   isLoading = true;
-  render();         // re-render to disable button & show spinner on it
+
+  // Show spinner on the button without re-rendering the whole page
+  const btn = document.getElementById('refreshBtn');
+  if (btn) {
+    btn.disabled = true;
+    btn.innerHTML = refreshIcon(true) + ' Generating prayers…';
+  }
+
   renderLoading();
 
   try {
     const data = await fetchPrayers();
-    renderPrayers(data.prayers || []);
-    // Only start the cooldown on success
+
+    // Treat an empty prayers array as a failure — don't start the countdown
+    if (!data.prayers || data.prayers.length === 0) {
+      throw new Error('The server returned no prayers. Please try again.');
+    }
+
+    renderPrayers(data.prayers);
+
+    // ✅ Only on complete success: lock the button for 30 minutes
     startCooldown();
+    applyCooldownToButton();
+
   } catch (err) {
     renderError(err.message || 'Could not connect to the Intercede API. Is the backend running?');
+
+    // ❌ On any error: re-enable button immediately, no countdown
+    const errBtn = document.getElementById('refreshBtn');
+    if (errBtn) {
+      errBtn.disabled = false;
+      errBtn.innerHTML = refreshIcon() + ' Refresh Prayers';
+    }
+
   } finally {
     isLoading = false;
-    render(); // re-render to restore button state
   }
 }
 
