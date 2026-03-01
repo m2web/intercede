@@ -168,12 +168,13 @@ async function loadPrayers() {
   try {
     const data = await fetchPrayers();
     renderPrayers(data.prayers || []);
+    // Only start the cooldown on success
+    startCooldown();
   } catch (err) {
     renderError(err.message || 'Could not connect to the Intercede API. Is the backend running?');
   } finally {
     isLoading = false;
-    // Stamp the fetch time and start the 30-minute cooldown
-    startCooldown();
+    render(); // re-render to restore button state
   }
 }
 
