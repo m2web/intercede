@@ -26,6 +26,8 @@ app.add_middleware(
         "http://localhost:5173",
         "http://localhost:3000",
         "https://intercede-frontend.onrender.com",  # Render frontend
+        "https://intercede-now.org",                # Custom domain
+        "https://www.intercede-now.org",            # Custom domain (www)
     ],
     allow_credentials=True,
     allow_methods=["*"],
