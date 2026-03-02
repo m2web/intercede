@@ -435,11 +435,26 @@ body::before {
   font-size: 0.9rem;
   color: var(--accent-gold);
   line-height: 1.55;
-  margin-bottom: 16px;
+  margin-bottom: 4px;
   padding: 12px 14px;
   background: rgba(232,201,106,0.06);
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
   border-left: 2px solid rgba(232,201,106,0.3);
+}
+
+.prayer-card .verse-ref {
+  display: block;
+  font-size: 0.75rem;
+  font-style: normal;
+  font-weight: 500;
+  color: rgba(232, 201, 106, 0.6);
+  text-align: right;
+  padding: 4px 14px 10px;
+  background: rgba(232,201,106,0.04);
+  border-left: 2px solid rgba(232,201,106,0.3);
+  border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+  letter-spacing: 0.03em;
+  margin-bottom: 16px;
 }
 
 .prayer-card .reflection {
