@@ -108,9 +108,10 @@ The API will be at `http://localhost:8000`.
       "link": "https://...",
       "source": "Reuters",
       "published": "Sun, 01 Mar 2026 12:00:00 GMT",
-      "esv_verse": "\"Verse text.\" -- Book Chapter:Verse",
-      "reflection": "2-3 sentence theological reflection.",
-      "prayer": "Lord, you ordain all things for your glory..."
+      "esv_verse": "Verse text.",
+      "esv_ref": "Book Chapter:Verse",
+      "reflection": "1-2 sentence theological reflection.",
+      "prayer": "Gracious Father, ..."
     }
   ]
 }
@@ -157,10 +158,11 @@ the Render frontend origin, and `localhost:5173` / `localhost:3000` for local de
 2. **Reasoning**: All 3 headlines are sent to `gpt-4o-mini` (configurable via
    `OPENAI_MODEL`) with a Reformed Christian system prompt that instructs the
    model to:
-   - Begin each prayer with *"Lord, you ordain all things for your glory..."*
-   - Reflect briefly on the headline's spiritual significance
-   - Write a substantive intercessory petition for those affected
-   - Include a relevant ESV Bible verse
+   - Open each prayer with a varied Reformed address (e.g. *"Sovereign Lord..."*,
+     *"Gracious Father..."*) — unique per headline
+   - Reflect in 1-2 sentences on the headline's spiritual significance
+   - Write a focused 3-4 sentence intercessory petition for those affected
+   - Include a relevant ESV Bible verse with its reference (`esv_verse` + `esv_ref`)
    - Close with a doxological phrase
 3. **Display**: The Vite frontend renders news + prayer cards side-by-side in a
    dark glassmorphism UI.
