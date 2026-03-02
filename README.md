@@ -78,7 +78,7 @@ cp .env.example .env
 
 | Variable         | Required | Default       | Description                   |
 | ---              | ---      | ---           | ---                           |
-| `OPENAI_API_KEY` | Yes      | —             | Your OpenAI API key           |
+| `OPENAI_API_KEY` | Yes      | --            | Your OpenAI API key           |
 | `OPENAI_MODEL`   | No       | `gpt-4o-mini` | Override the OpenAI model     |
 
 ### Step 2 - Backend
@@ -108,8 +108,8 @@ The API will be at `http://localhost:8000`.
       "link": "https://...",
       "source": "Reuters",
       "published": "Sun, 01 Mar 2026 12:00:00 GMT",
-      "esv_verse": "\"Verse text.\" — Book Chapter:Verse",
-      "reflection": "2–3 sentence theological reflection.",
+      "esv_verse": "\"Verse text.\" -- Book Chapter:Verse",
+      "reflection": "2-3 sentence theological reflection.",
       "prayer": "Lord, you ordain all things for your glory..."
     }
   ]
@@ -141,7 +141,7 @@ The app is deployed on [Render](https://render.com):
 
 | Service  | URL                                                                                               |
 | ---      | ---                                                                                               |
-| Frontend | [`https://intercede-now.org`](https://intercede-now.org) (custom domain via Cloudflare → `https://intercede-frontend.onrender.com`) |
+| Frontend | [`https://intercede-now.org`](https://intercede-now.org) (custom domain via Cloudflare -> `https://intercede-frontend.onrender.com`) |
 | Backend  | Deployed on Render; URL not publicly listed. Configure `VITE_API_BASE_URL` instead.               |
 
 The backend's CORS policy explicitly allows the custom domain (`intercede-now.org`),
