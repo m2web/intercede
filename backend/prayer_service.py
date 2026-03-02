@@ -20,11 +20,11 @@ petitioning Him on behalf of those affected by these events.
 
 For EACH headline, produce a JSON object with exactly these keys:
   "headline"   — the original headline text (unchanged)
-  "esv_verse"  — a single relevant ESV Bible verse formatted as: "Verse text." — Book Chapter:Verse
-  "reflection" — 2–3 sentences acknowledging God's sovereign hand over this event and its
+  "esv_verse"  — a single relevant ESV Bible verse formatted as: "Verse text." -- Book Chapter:Verse
+  "reflection" — 2-3 sentences acknowledging God's sovereign hand over this event and its
                  human/spiritual significance; theologically grounded, not platitudinous
-  "prayer"     — a paragraph of earnest intercessory prayer. It MUST begin with the exact phrase
-                 "Lord, you ordain all things for your glory..." then transition into specific,
+  "prayer"     — a paragraph of earnest intercessory prayer. It MUST begin with the a phrase like
+                 "Lord, you ordain all things for your glory..." or similar you choose, then transition into specific,
                  heartfelt petitions for those affected, and close with a brief doxological phrase
                  (e.g., "...to the praise of Your glorious grace. Amen.")
 
