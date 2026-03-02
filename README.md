@@ -139,13 +139,13 @@ VITE_API_BASE_URL=https://your-backend.onrender.com
 
 The app is deployed on [Render](https://render.com):
 
-| Service  | URL                                                                                  |
-| ---      | ---                                                                                  |
-| Frontend | `https://intercede-frontend.onrender.com`                                            |
-| Backend  | Deployed on Render; URL not publicly listed. Configure `VITE_API_BASE_URL` instead.  |
+| Service  | URL                                                                                               |
+| ---      | ---                                                                                               |
+| Frontend | [`https://intercede-now.org`](https://intercede-now.org) (custom domain via Cloudflare → `https://intercede-frontend.onrender.com`) |
+| Backend  | Deployed on Render; URL not publicly listed. Configure `VITE_API_BASE_URL` instead.               |
 
-The backend's CORS policy explicitly allows the Render frontend origin in
-addition to `localhost:5173` and `localhost:3000` for local development.
+The backend's CORS policy explicitly allows the custom domain (`intercede-now.org`),
+the Render frontend origin, and `localhost:5173` / `localhost:3000` for local development.
 
 ## How It Works
 
