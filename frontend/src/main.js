@@ -126,7 +126,7 @@ function renderLoading() {
       <div class="neural-loader">
         <span></span><span></span><span></span>
       </div>
-      <p class="loading-text">Gathering today's headlines and crafting prayers…</p>
+      <p class="loading-text">Gathering today's headlines and crafting prayers...this will take time...builds patience. 😊</p>
     </div>
   `;
 }
