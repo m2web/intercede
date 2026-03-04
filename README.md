@@ -40,6 +40,7 @@ intercede/
 |   +-- requirements.txt
 +-- frontend/             # Vite (vanilla JS)
 |   +-- dist/             # Production build output
+|   +-- public/           # Static assets
 |   +-- index.html
 |   +-- package.json
 |   +-- src/
@@ -147,8 +148,9 @@ The app is deployed on [Render](https://render.com):
 | Backend  | Deployed on Render; URL not publicly listed. Configure `VITE_API_BASE_URL` instead.               |
 <!-- markdownlint-enable MD013 -->
 
-The backend's CORS policy explicitly allows the custom domain (`intercede-now.org`),
-the Render frontend origin, and `localhost:5173` / `localhost:3000` for local development.
+The backend's CORS policy explicitly allows the custom domain (`intercede-now.org`
+and `www.intercede-now.org`), the Render frontend origin, and `localhost:5173` /
+`localhost:3000` for local development.
 
 ## How It Works
 
@@ -165,4 +167,7 @@ the Render frontend origin, and `localhost:5173` / `localhost:3000` for local de
    - Include a relevant ESV Bible verse with its reference (`esv_verse` + `esv_ref`)
    - Close with a doxological phrase
 3. **Display**: The Vite frontend renders news + prayer cards side-by-side in a
-   dark glassmorphism UI.
+   dark glassmorphism UI. After a successful fetch the Refresh button is locked
+   for 30 minutes; a live countdown (`mm:ss`) is shown on the button and the
+   lock is stored in `localStorage` so it survives page reloads. If the request
+   fails the button re-enables immediately with no cooldown applied.
