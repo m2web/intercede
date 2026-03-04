@@ -17,34 +17,37 @@ Use this skill any time you are:
 
 ## Commit Message Format
 
-Every commit message **must begin with a GitHub emoji** that reflects the
-nature of the change, followed by a short imperative subject line.
+Every commit message **must begin with the actual GitHub emoji character**
+(not a `:code:` placeholder) that reflects the nature of the change,
+followed by a short imperative subject line.
 
 ```text
-:emoji: type: short description
+✨ feat: add prayer card component
 
 - Optional bullet detail
 - Optional bullet detail
 ```
 
+Pick the emoji character from the guide below.
+
 ### Emoji Guide
 
-| Code | When to use |
-| --- | --- |
-| `:sparkles:` | New feature or initial commit |
-| `:bug:` | Bug fix |
-| `:memo:` | Documentation update |
-| `:recycle:` | Refactor (no behavior change) |
-| `:art:` | Code style / formatting |
-| `:zap:` | Performance improvement |
-| `:wrench:` | Config / tooling change |
-| `:lock:` | Security fix |
-| `:heavy_plus_sign:` | Add a dependency |
-| `:heavy_minus_sign:` | Remove a dependency |
-| `:wastebasket:` | Remove dead code or files |
-| `:rocket:` | Deploy or release |
-| `:white_check_mark:` | Add or update tests |
-| `:twisted_rightwards_arrows:` | Merge branches |
+| Emoji code | Character to use | When to use |
+| --- | --- | --- |
+| `:sparkles:` | `✨` | New feature or initial commit |
+| `:bug:` | `🐛` | Bug fix |
+| `:memo:` | `📝` | Documentation update |
+| `:recycle:` | `♻️` | Refactor (no behavior change) |
+| `:art:` | `🎨` | Code style / formatting |
+| `:zap:` | `⚡️` | Performance improvement |
+| `:wrench:` | `🔧` | Config / tooling change |
+| `:lock:` | `🔒` | Security fix |
+| `:heavy_plus_sign:` | `➕` | Add a dependency |
+| `:heavy_minus_sign:` | `➖` | Remove a dependency |
+| `:wastebasket:` | `🗑️` | Remove dead code or files |
+| `:rocket:` | `🚀` | Deploy or release |
+| `:white_check_mark:` | `✅` | Add or update tests |
+| `:twisted_rightwards_arrows:` | `🔀` | Merge branches |
 
 ## Branch Naming Strategy
 
