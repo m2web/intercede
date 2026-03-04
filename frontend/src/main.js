@@ -85,8 +85,8 @@ function render() {
   header.className = 'app-header';
   header.innerHTML = `
     <div class="logo-mark"><span class="dot"></span> Intercede</div>
-    <h1>Daily Intercessory Prayer</h1>
-    <p class="tagline">LLMs reasoning over today's headlines to help you lift up the world in prayer.</p>
+    <h1>Intercede Now</h1>
+    <p class="tagline">LLMs reasoning over current headlines to help you lift up the world in prayer.</p>
     <button class="refresh-btn" id="refreshBtn">
       ${refreshIcon(isLoading)}
       ${isLoading ? 'Generating prayers…' : 'Refresh Prayers'}
