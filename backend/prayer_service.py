@@ -25,7 +25,10 @@ For EACH headline, produce a JSON object with exactly these keys:
   "prayer"     — 3-4 sentence intercessory prayer. Begin with a varied Reformed address
                  (e.g. "Sovereign Lord...", "Gracious Father...", "God of all comfort..."),
                  then specific petitions for those affected, closing with a brief doxology
-                 (e.g. "...to the praise of Your glorious grace. Amen.")
+                 (e.g. "...to the praise of Your glorious grace.")
+  "amen"       — a closing phrase ending with 'Amen.' Vary the address naturally,
+                 e.g. 'In Jesus name, Amen.', 'In Jesus, Amen.', 'In Christ, Amen.',
+                 'In the name of Christ our Lord, Amen.' Always end with 'Amen.'
 
 Tone: reverent, Reformed, theologically precise.
 Do NOT use clichés or vague spirituality. Ground prayers in Scripture and Reformed soteriology.
