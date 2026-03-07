@@ -476,6 +476,16 @@ body::before {
   font-weight: 300;
 }
 
+.prayer-card .prayer-amen {
+  font-size: 0.85rem;
+  font-style: italic;
+  color: var(--accent-gold);
+  text-align: right;
+  margin-top: 10px;
+  padding-right: 4px;
+  letter-spacing: 0.02em;
+}
+
 /* ================================================================
    Footer
    ================================================================ */

@@ -20,6 +20,7 @@ export function createPrayerCard(item, index) {
     ${verseHtml}
     ${item.reflection ? `<p class="reflection">${item.reflection}</p>` : ''}
     <p class="prayer-text">${item.prayer || ''}</p>
+    ${item.amen ? `<p class="prayer-amen">${item.amen}</p>` : ''}
   `;
 
   return card;

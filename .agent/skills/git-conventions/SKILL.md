@@ -17,9 +17,13 @@ Use this skill any time you are:
 
 ## Commit Message Format
 
-Every commit message **must begin with the actual GitHub emoji character**
-(not a `:code:` placeholder) that reflects the nature of the change,
-followed by a short imperative subject line.
+Every commit message **must begin with an emoji** that reflects the nature
+of the change, followed by a short imperative subject line. You may use:
+
+- The actual emoji character (e.g. `✏️`), **or**
+- A GitHub `:emoji_code:` shorthand (e.g. `:pencil2:`)
+
+Any GitHub-supported emoji is allowed — choose whichever best fits the change.
 
 ```text
 ✨ feat: add prayer card component
@@ -28,11 +32,9 @@ followed by a short imperative subject line.
 - Optional bullet detail
 ```
 
-Pick the emoji character from the guide below.
+### Common Emoji Reference (not exhaustive)
 
-### Emoji Guide
-
-| Emoji code | Character to use | When to use |
+| Emoji code | Character | When to use |
 | --- | --- | --- |
 | `:sparkles:` | `✨` | New feature or initial commit |
 | `:bug:` | `🐛` | Bug fix |
