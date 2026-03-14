@@ -4,17 +4,17 @@
    ================================================================ */
 
 :root {
-  --bg-deep:       #050810;
-  --bg-mid:        #0b0f1e;
+  --bg-deep:       #020610;
+  --bg-mid:        #050c1f;
   --bg-card:       rgba(255, 255, 255, 0.04);
   --bg-card-hover: rgba(255, 255, 255, 0.07);
   --border:        rgba(255, 255, 255, 0.08);
-  --border-glow:   rgba(120, 160, 255, 0.3);
+  --border-glow:   rgba(0, 157, 255, 0.3);
 
-  --accent-blue:   #4f8bff;
-  --accent-violet: #9b72ff;
-  --accent-gold:   #e8c96a;
-  --accent-teal:   #38d9a9;
+  --accent-blue:   #009dff;
+  --accent-violet: #ffffff;
+  --accent-gold:   #e6f5ff;
+  --accent-teal:   #005bb5;
 
   --text-primary:  #e8eaf2;
   --text-secondary:#8f9bbf;
@@ -29,7 +29,7 @@
   --radius-lg:     20px;
 
   --shadow-card:   0 4px 32px rgba(0, 0, 0, 0.5), 0 1px 0 rgba(255,255,255,0.05) inset;
-  --shadow-glow:   0 0 40px rgba(79, 139, 255, 0.12);
+  --shadow-glow:   0 0 40px rgba(0, 157, 255, 0.12);
 }
 
 *, *::before, *::after {
@@ -57,9 +57,9 @@ body::before {
   position: fixed;
   inset: 0;
   background:
-    radial-gradient(ellipse 80% 60% at 20% 10%, rgba(79,139,255,0.08) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 80% at 80% 80%, rgba(155,114,255,0.07) 0%, transparent 60%),
-    radial-gradient(ellipse 50% 50% at 50% 50%, rgba(56,217,169,0.04) 0%, transparent 70%);
+    radial-gradient(ellipse 80% 60% at 20% 10%, rgba(0,157,255,0.08) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 80% at 80% 80%, rgba(255,255,255,0.07) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 50% at 50% 50%, rgba(0,91,181,0.04) 0%, transparent 70%);
   pointer-events: none;
   z-index: 0;
   animation: meshShift 18s ease-in-out infinite alternate;
@@ -117,7 +117,7 @@ body::before {
   font-size: clamp(2.4rem, 5vw, 3.8rem);
   font-weight: 600;
   letter-spacing: -0.01em;
-  background: linear-gradient(135deg, #e8eaf2 0%, #9b72ff 50%, #4f8bff 100%);
+  background: linear-gradient(135deg, #e8eaf2 0%, #ffffff 50%, #009dff 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -139,7 +139,7 @@ body::before {
   align-items: center;
   gap: 8px;
   padding: 12px 28px;
-  background: linear-gradient(135deg, rgba(79,139,255,0.15), rgba(155,114,255,0.15));
+  background: linear-gradient(135deg, rgba(0,157,255,0.15), rgba(255,255,255,0.15));
   border: 1px solid var(--border-glow);
   border-radius: 100px;
   color: var(--text-primary);
@@ -152,10 +152,10 @@ body::before {
 }
 
 .refresh-btn:hover:not(:disabled) {
-  background: linear-gradient(135deg, rgba(79,139,255,0.28), rgba(155,114,255,0.28));
-  border-color: rgba(120,160,255,0.55);
+  background: linear-gradient(135deg, rgba(0,157,255,0.28), rgba(255,255,255,0.28));
+  border-color: rgba(0,157,255,0.55);
   transform: translateY(-1px);
-  box-shadow: 0 8px 24px rgba(79,139,255,0.2);
+  box-shadow: 0 8px 24px rgba(0,157,255,0.2);
 }
 
 .refresh-btn:disabled {
@@ -389,7 +389,7 @@ body::before {
   position: absolute;
   top: 0; left: 0; right: 0;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(155,114,255,0.25), transparent);
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
 }
 
 .prayer-card::after {
@@ -403,9 +403,9 @@ body::before {
 
 .prayer-card:hover {
   background: var(--bg-card-hover);
-  border-color: rgba(155,114,255,0.22);
+  border-color: rgba(255,255,255,0.22);
   transform: translateY(-2px);
-  box-shadow: var(--shadow-card), 0 0 40px rgba(155,114,255,0.1);
+  box-shadow: var(--shadow-card), 0 0 40px rgba(255,255,255,0.1);
 }
 
 .prayer-card .card-label {
@@ -437,9 +437,9 @@ body::before {
   line-height: 1.55;
   margin-bottom: 4px;
   padding: 12px 14px;
-  background: rgba(232,201,106,0.06);
+  background: rgba(230,245,255,0.06);
   border-radius: var(--radius-sm) var(--radius-sm) 0 0;
-  border-left: 2px solid rgba(232,201,106,0.3);
+  border-left: 2px solid rgba(230,245,255,0.3);
 }
 
 .prayer-card .verse-ref {
@@ -447,11 +447,11 @@ body::before {
   font-size: 0.75rem;
   font-style: normal;
   font-weight: 500;
-  color: rgba(232, 201, 106, 0.6);
+  color: rgba(230, 245, 255, 0.6);
   text-align: right;
   padding: 4px 14px 10px;
-  background: rgba(232,201,106,0.04);
-  border-left: 2px solid rgba(232,201,106,0.3);
+  background: rgba(230,245,255,0.04);
+  border-left: 2px solid rgba(230,245,255,0.3);
   border-radius: 0 0 var(--radius-sm) var(--radius-sm);
   letter-spacing: 0.03em;
   margin-bottom: 16px;
@@ -470,9 +470,9 @@ body::before {
   color: var(--text-primary);
   line-height: 1.8;
   padding: 16px;
-  background: rgba(79,139,255,0.05);
+  background: rgba(0,157,255,0.05);
   border-radius: var(--radius-sm);
-  border: 1px solid rgba(79,139,255,0.1);
+  border: 1px solid rgba(0,157,255,0.1);
   font-weight: 300;
 }
 
