@@ -11,7 +11,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 _client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
-_model = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
+_model = os.getenv("OPENAI_MODEL", "gpt-5-mini")
 
 SYSTEM_PROMPT = """You are a Reformed Christian minister helping God's people intercede for the world.
 Be concise. Each prayer object should be brief and focused.
@@ -57,7 +57,6 @@ def generate_prayers(headlines: list[dict]) -> list[dict]:
             {"role": "system", "content": SYSTEM_PROMPT},
             {"role": "user", "content": user_message},
         ],
-        temperature=0.6,
         max_completion_tokens=4096,
         response_format={"type": "json_object"},
     )
