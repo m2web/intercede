@@ -1,4 +1,4 @@
-# Intercede - Daily Intercessory Prayer
+# Intercede Now
 
 > *"I urge that supplications, prayers, intercessions, and thanksgivings*
 > *be made for all people...\" -- 1 Timothy 2:1 (ESV)*
