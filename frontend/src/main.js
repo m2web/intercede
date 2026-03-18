@@ -86,7 +86,7 @@ function render() {
   header.innerHTML = `
     <div class="logo-mark"><span class="dot"></span> Intercede</div>
     <h1>Intercede Now</h1>
-    <p class="tagline">LLMs reasoning over current headlines to help you lift up the world in prayer.</p>
+    <p class="tagline">AI reasoning over current headlines to help you lift up the world in prayer.</p>
     <button class="refresh-btn" id="refreshBtn">
       ${refreshIcon(isLoading)}
       ${isLoading ? 'Generating prayers…' : 'Refresh Prayers'}
