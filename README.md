@@ -15,7 +15,7 @@ sequenceDiagram
     participant FE as Frontend<br/>(Vite - localhost:5173)
     participant BE as Backend<br/>(FastAPI - localhost:8000)
     participant RSS as Google News<br/>RSS Feed
-    participant AI as OpenAI<br/>gpt-4o-mini
+    participant AI as OpenAI<br/>gpt-5-mini
 
     User->>FE: Click "Generate Prayers"
     FE->>BE: GET /api/prayers
