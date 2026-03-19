@@ -80,7 +80,7 @@ cp .env.example .env
 | Variable         | Required | Default       | Description                   |
 | ---              | ---      | ---           | ---                           |
 | `OPENAI_API_KEY` | Yes      | --            | Your OpenAI API key           |
-| `OPENAI_MODEL`   | No       | `gpt-4o-mini` | Override the OpenAI model     |
+| `OPENAI_MODEL`   | No       | `gpt-5-mini`  | Override the OpenAI model     |
 
 ### Step 2 - Backend
 
@@ -142,10 +142,10 @@ VITE_API_BASE_URL=https://your-backend.onrender.com
 The app is deployed on [Render](https://render.com):
 
 <!-- markdownlint-disable MD013 -->
-| Service  | URL                                                                                               |
-| ---      | ---                                                                                               |
-| Frontend | [`https://intercede-now.org`](https://intercede-now.org) (custom domain via Cloudflare -> `https://intercede-frontend.onrender.com`) |
-| Backend  | Deployed on Render; URL not publicly listed. Configure `VITE_API_BASE_URL` instead.               |
+| Service  | URL                                                                                                                                       |
+| -------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| Frontend | [`https://intercede-now.org`](https://intercede-now.org) (custom domain via Cloudflare -> `https://intercede-frontend.onrender.com`)      |
+| Backend  | Deployed on Render; URL not publicly listed. Configure `VITE_API_BASE_URL` instead.                                                       |
 <!-- markdownlint-enable MD013 -->
 
 The backend's CORS policy explicitly allows the custom domain (`intercede-now.org`
@@ -157,7 +157,7 @@ and `www.intercede-now.org`), the Render frontend origin, and `localhost:5173` /
 1. **News**: Google News Top Stories RSS is parsed for the top 3 US headlines
    (free, no API key required). Each headline includes its `title`, `link`,
    `source`, and `published` date.
-2. **Reasoning**: All 3 headlines are sent to `gpt-4o-mini` (configurable via
+2. **Reasoning**: All 3 headlines are sent to `gpt-5-mini` (configurable via
    `OPENAI_MODEL`) with a Reformed Christian system prompt that instructs the
    model to:
    - Open each prayer with a varied Reformed address (e.g. *"Sovereign Lord..."*,
