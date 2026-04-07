@@ -51,18 +51,32 @@ def generate_prayers(headlines: list[dict]) -> list[dict]:
         f"{headline_list}"
     )
 
-    response = _client.chat.completions.create(
-        model=_model,
-        messages=[
-            {"role": "system", "content": SYSTEM_PROMPT},
-            {"role": "user", "content": user_message},
-        ],
-        max_completion_tokens=4096,
-        response_format={"type": "json_object"},
-    )
+    # Retry up to 2 times if JSON parsing fails (useful for cold-starts/flakiness)
+    max_retries = 2
+    last_err = None
 
-    content = response.choices[0].message.content
-    parsed = json.loads(content)
+    for attempt in range(max_retries):
+        try:
+            response = _client.chat.completions.create(
+                model=_model,
+                messages=[
+                    {"role": "system", "content": SYSTEM_PROMPT},
+                    {"role": "user", "content": user_message},
+                ],
+                max_completion_tokens=4096,
+                response_format={"type": "json_object"},
+                timeout=120.0, # Explicitly set a longer timeout for reasoning models
+            )
+
+            content = response.choices[0].message.content
+            # strict=False allows literal control characters (like newlines) in strings
+            parsed = json.loads(content, strict=False)
+            break
+        except (json.JSONDecodeError, Exception) as e:
+            last_err = e
+            if attempt == max_retries - 1:
+                raise last_err
+            continue
 
     # Model returns {"prayers": [...]} per our system prompt
     if isinstance(parsed, list):
