@@ -3,7 +3,9 @@ app.py — FastAPI backend for Intercede.
 Fetches top news headlines and generates Reformed Christian intercessory prayers.
 """
 
+import logging
 import os
+
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -13,6 +15,9 @@ import news_service
 import prayer_service
 
 load_dotenv()
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 app = FastAPI(
     title="Intercede API",
@@ -57,12 +62,15 @@ def get_prayers():
     try:
         headlines = news_service.fetch_top_headlines(count=3)
         if not headlines:
+            logger.error("news_service returned 0 headlines — returning 503")
             raise HTTPException(status_code=503, detail="Could not fetch news headlines.")
+        logger.info("Fetched %d headlines, generating prayers…", len(headlines))
         prayers = prayer_service.generate_prayers(headlines)
         return {"prayers": prayers}
     except HTTPException:
         raise
     except Exception as e:
+        logger.exception("Unhandled error in get_prayers")
         raise HTTPException(status_code=500, detail=f"Error generating prayers: {str(e)}")
 
 
