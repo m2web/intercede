@@ -5,6 +5,7 @@ Fetches top news headlines and generates Reformed Christian intercessory prayers
 
 import logging
 import os
+import time
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
@@ -18,6 +19,11 @@ load_dotenv()
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+# ── In-memory prayer cache (30-minute TTL) ─────────────────
+CACHE_TTL_SECONDS = 30 * 60  # 30 minutes
+_prayer_cache: dict | None = None
+_cache_timestamp: float = 0.0
 
 app = FastAPI(
     title="Intercede API",
@@ -56,9 +62,23 @@ def get_prayers():
     """
     Fetch top 3 news headlines and generate an intercessory prayer for each.
 
+    Returns cached data if available and less than 30 minutes old.
+    Otherwise fetches fresh headlines, generates prayers via the LLM,
+    caches the result, and returns it.
+
     Returns a list of objects each containing:
       title, link, source, published, esv_verse, reflection, prayer
     """
+    global _prayer_cache, _cache_timestamp
+
+    # Serve from cache if still fresh
+    age = time.time() - _cache_timestamp
+    if _prayer_cache is not None and age < CACHE_TTL_SECONDS:
+        remaining = int(CACHE_TTL_SECONDS - age)
+        logger.info("Serving cached prayers (%d s remaining)", remaining)
+        return _prayer_cache
+
+    # Cache miss or expired — fetch fresh data
     try:
         headlines = news_service.fetch_top_headlines(count=3)
         if not headlines:
@@ -66,7 +86,14 @@ def get_prayers():
             raise HTTPException(status_code=503, detail="Could not fetch news headlines.")
         logger.info("Fetched %d headlines, generating prayers…", len(headlines))
         prayers = prayer_service.generate_prayers(headlines)
-        return {"prayers": prayers}
+        response = {"prayers": prayers}
+
+        # Store in cache
+        _prayer_cache = response
+        _cache_timestamp = time.time()
+        logger.info("Prayers cached for %d seconds", CACHE_TTL_SECONDS)
+
+        return response
     except HTTPException:
         raise
     except Exception as e:
