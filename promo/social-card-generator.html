@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Intercede Now — Social Card Generator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,500;1,600&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Reset & Base ─────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-deep:       #020610;
+      --bg-mid:        #050c1f;
+      --accent-blue:   #009dff;
+      --accent-teal:   #005bb5;
+      --text-primary:  #e8eaf2;
+      --text-secondary:#8f9bbf;
+      --text-muted:    #4a5178;
+      --border:        rgba(255, 255, 255, 0.08);
+      --font-body:     'Inter', system-ui, sans-serif;
+      --font-display:  'Playfair Display', Georgia, serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--bg-deep);
+      color: var(--text-primary);
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 20% 10%, rgba(0,157,255,0.08) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 80% at 80% 80%, rgba(255,255,255,0.07) 0%, transparent 60%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── Layout ──────────────────────────────── */
+    .shell {
+      position: relative;
+      z-index: 1;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+    }
+
+    .page-header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .page-header h1 {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      font-weight: 600;
+      background: linear-gradient(135deg, #e8eaf2 0%, #fff 50%, #009dff 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 8px;
+    }
+
+    .page-header p {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      max-width: 580px;
+      margin: 0 auto;
+    }
+
+    /* ── Controls Panel ─────────────────────── */
+    .controls {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-bottom: 48px;
+    }
+
+    @media (max-width: 700px) {
+      .controls { grid-template-columns: 1fr; }
+    }
+
+    .control-group {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 24px;
+      backdrop-filter: blur(12px);
+    }
+
+    .control-group label {
+      display: block;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent-blue);
+      margin-bottom: 10px;
+    }
+
+    select, textarea, input[type="text"] {
+      width: 100%;
+      padding: 10px 14px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px;
+      color: var(--text-primary);
+      font-family: var(--font-body);
+      font-size: 0.88rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    select:focus, textarea:focus, input[type="text"]:focus {
+      border-color: var(--accent-blue);
+    }
+
+    textarea {
+      min-height: 100px;
+      resize: vertical;
+      line-height: 1.5;
+    }
+
+    select {
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%238f9bbf' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+    }
+
+    option { background: #0a1330; }
+
+    .field + .field { margin-top: 14px; }
+
+    /* ── Buttons ─────────────────────────────── */
+    .btn-row {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      margin-bottom: 48px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 28px;
+      border: 1px solid rgba(0,157,255,0.3);
+      border-radius: 100px;
+      background: linear-gradient(135deg, rgba(0,157,255,0.15), rgba(255,255,255,0.08));
+      color: var(--text-primary);
+      font-family: var(--font-body);
+      font-size: 0.88rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      letter-spacing: 0.02em;
+    }
+
+    .btn:hover {
+      background: linear-gradient(135deg, rgba(0,157,255,0.3), rgba(255,255,255,0.18));
+      border-color: rgba(0,157,255,0.6);
+      transform: translateY(-1px);
+      box-shadow: 0 8px 24px rgba(0,157,255,0.2);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #009dff, #005bb5);
+      border-color: rgba(0,157,255,0.5);
+      font-weight: 600;
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #1aadff, #0069d9);
+    }
+
+    /* ── Canvas Preview ─────────────────────── */
+    .preview-area {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .preview-area canvas {
+      max-width: 100%;
+      height: auto;
+      border-radius: 12px;
+      box-shadow:
+        0 4px 60px rgba(0,0,0,0.6),
+        0 0 80px rgba(0,157,255,0.08);
+    }
+
+    .preview-hint {
+      margin-top: 16px;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+<div class="shell">
+  <!-- Header -->
+  <div class="page-header">
+    <h1>Social Card Generator</h1>
+    <p>Create mobile-friendly, eye-catching promotional graphics for Intercede Now that look great on any social media platform.</p>
+  </div>
+
+  <!-- Controls -->
+  <div class="controls">
+    <!-- Left column: card content -->
+    <div class="control-group">
+      <div class="field">
+        <label>Template</label>
+        <select id="templateSelect">
+          <option value="brand">🙏 Brand Promo — Introduce the site</option>
+          <option value="verse">📖 Verse Focus — Highlight a Scripture</option>
+          <option value="headline">📰 Headline + Prayer — Feature a prayer</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Aspect Ratio</label>
+        <select id="ratioSelect">
+          <option value="1:1">1:1 — Instagram / Facebook</option>
+          <option value="16:9">16:9 — Twitter / LinkedIn</option>
+          <option value="9:16">9:16 — Stories / Reels</option>
+          <option value="4:5">4:5 — Instagram Portrait</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Main Headline</label>
+        <input type="text" id="headlineInput" value="Let AI Help You Pray for Today's World" />
+      </div>
+
+      <div class="field">
+        <label>Sub-text (optional)</label>
+        <textarea id="subtextInput">Intercede Now uses AI to read today's top news and generate Reformed Christian intercessory prayers — complete with ESV Scripture.</textarea>
+      </div>
+    </div>
+
+    <!-- Right column: verse / prayer content -->
+    <div class="control-group">
+      <div class="field">
+        <label>Scripture Verse (for Verse or Headline templates)</label>
+        <textarea id="verseInput">"I urge that supplications, prayers, intercessions, and thanksgivings be made for all people…"</textarea>
+      </div>
+
+      <div class="field">
+        <label>Verse Reference</label>
+        <input type="text" id="verseRefInput" value="1 Timothy 2:1 (ESV)" />
+      </div>
+
+      <div class="field">
+        <label>Call-to-Action URL</label>
+        <input type="text" id="ctaInput" value="intercede-now.org" />
+      </div>
+
+      <div class="field">
+        <label>Color Theme</label>
+        <select id="themeSelect">
+          <option value="deep-blue">Deep Blue (Default)</option>
+          <option value="midnight-violet">Midnight Violet</option>
+          <option value="ocean-teal">Ocean Teal</option>
+          <option value="warm-ember">Warm Ember</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Action Buttons -->
+  <div class="btn-row">
+    <button class="btn btn-primary" id="generateBtn">✨ Generate Card</button>
+    <button class="btn" id="downloadBtn">⬇ Download PNG</button>
+    <button class="btn" id="copyBtn">📋 Copy to Clipboard</button>
+  </div>
+
+  <!-- Canvas Preview -->
+  <div class="preview-area">
+    <canvas id="cardCanvas" width="1080" height="1080"></canvas>
+    <p class="preview-hint">Preview rendered at native resolution · Right-click to save, or use the Download button above</p>
+  </div>
+</div>
+
+<script>
+// ════════════════════════════════════════════════════════════
+// Intercede Now — Social Card Generator (Canvas-based)
+// ════════════════════════════════════════════════════════════
+
+const canvas = document.getElementById('cardCanvas');
+const ctx    = canvas.getContext('2d');
+
+// ── Theme palettes ────────────────────────────────────────
+const THEMES = {
+  'deep-blue': {
+    bg1: '#020610', bg2: '#0a1f4a', bg3: '#001133',
+    glow1: 'rgba(0,157,255,0.18)', glow2: 'rgba(0,91,181,0.12)',
+    accent: '#009dff', accentSoft: 'rgba(0,157,255,0.35)',
+    gold: '#b8d4ff', textPrimary: '#e8eaf2', textSecondary: '#8f9bbf',
+    textMuted: '#4a5178', cardBg: 'rgba(255,255,255,0.04)',
+    cardBorder: 'rgba(255,255,255,0.08)', verseBg: 'rgba(0,157,255,0.08)'
+  },
+  'midnight-violet': {
+    bg1: '#08041a', bg2: '#1a0a3e', bg3: '#0d0520',
+    glow1: 'rgba(138,43,226,0.2)', glow2: 'rgba(75,0,130,0.14)',
+    accent: '#b266ff', accentSoft: 'rgba(178,102,255,0.35)',
+    gold: '#dbc4ff', textPrimary: '#eae6f2', textSecondary: '#a08fc0',
+    textMuted: '#5a4878', cardBg: 'rgba(255,255,255,0.04)',
+    cardBorder: 'rgba(255,255,255,0.08)', verseBg: 'rgba(138,43,226,0.08)'
+  },
+  'ocean-teal': {
+    bg1: '#021210', bg2: '#063830', bg3: '#011a17',
+    glow1: 'rgba(0,206,180,0.18)', glow2: 'rgba(0,150,136,0.12)',
+    accent: '#00ceb4', accentSoft: 'rgba(0,206,180,0.35)',
+    gold: '#b4ffee', textPrimary: '#e2f2ef', textSecondary: '#8fbfb5',
+    textMuted: '#4a786f', cardBg: 'rgba(255,255,255,0.04)',
+    cardBorder: 'rgba(255,255,255,0.08)', verseBg: 'rgba(0,206,180,0.08)'
+  },
+  'warm-ember': {
+    bg1: '#100604', bg2: '#2a1008', bg3: '#1a0a04',
+    glow1: 'rgba(255,120,50,0.18)', glow2: 'rgba(200,80,30,0.12)',
+    accent: '#ff8844', accentSoft: 'rgba(255,136,68,0.35)',
+    gold: '#ffd4b0', textPrimary: '#f2ece8', textSecondary: '#bf9f8f',
+    textMuted: '#78604a', cardBg: 'rgba(255,255,255,0.04)',
+    cardBorder: 'rgba(255,255,255,0.08)', verseBg: 'rgba(255,120,50,0.08)'
+  }
+};
+
+const RATIOS = {
+  '1:1':  { w: 1080, h: 1080 },
+  '16:9': { w: 1200, h: 675 },
+  '9:16': { w: 1080, h: 1920 },
+  '4:5':  { w: 1080, h: 1350 }
+};
+
+// ── Helpers ───────────────────────────────────────────────
+
+function wrapText(text, maxWidth) {
+  const words = text.split(/\s+/);
+  const lines = [];
+  let current = '';
+  for (const word of words) {
+    const test = current ? current + ' ' + word : word;
+    if (ctx.measureText(test).width > maxWidth && current) {
+      lines.push(current);
+      current = word;
+    } else {
+      current = test;
+    }
+  }
+  if (current) lines.push(current);
+  return lines;
+}
+
+/** Draw spaced-out uppercase label text, centered at x. */
+function drawSpacedText(text, cx, cy, spacing) {
+  const chars = text.split('');
+  let totalW = 0;
+  for (const ch of chars) totalW += ctx.measureText(ch).width;
+  totalW += spacing * (chars.length - 1);
+
+  let x = cx - totalW / 2;
+  for (const ch of chars) {
+    const charW = ctx.measureText(ch).width;
+    ctx.fillText(ch, x + charW / 2, cy);
+    x += charW + spacing;
+  }
+}
+
+function roundRect(x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.lineTo(x + w - r, y);
+  ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+  ctx.lineTo(x + w, y + h - r);
+  ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+  ctx.lineTo(x + r, y + h);
+  ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+  ctx.lineTo(x, y + r);
+  ctx.quadraticCurveTo(x, y, x + r, y);
+  ctx.closePath();
+}
+
+function sf() {
+  return Math.sqrt((canvas.width * canvas.height) / (1080 * 1080));
+}
+
+// ── Background ────────────────────────────────────────────
+
+function drawBackground(t) {
+  const w = canvas.width, h = canvas.height;
+
+  const bg = ctx.createLinearGradient(0, 0, w, h);
+  bg.addColorStop(0,   t.bg1);
+  bg.addColorStop(0.4, t.bg2);
+  bg.addColorStop(1,   t.bg3);
+  ctx.fillStyle = bg;
+  ctx.fillRect(0, 0, w, h);
+
+  const glow1 = ctx.createRadialGradient(w*0.2, h*0.15, 0, w*0.2, h*0.15, w*0.55);
+  glow1.addColorStop(0, t.glow1);
+  glow1.addColorStop(1, 'transparent');
+  ctx.fillStyle = glow1;
+  ctx.fillRect(0, 0, w, h);
+
+  const glow2 = ctx.createRadialGradient(w*0.8, h*0.8, 0, w*0.8, h*0.8, w*0.5);
+  glow2.addColorStop(0, t.glow2);
+  glow2.addColorStop(1, 'transparent');
+  ctx.fillStyle = glow2;
+  ctx.fillRect(0, 0, w, h);
+
+  // Grid dots
+  ctx.fillStyle = 'rgba(255,255,255,0.015)';
+  for (let gx = 0; gx < w; gx += 40) {
+    for (let gy = 0; gy < h; gy += 40) {
+      ctx.beginPath();
+      ctx.arc(gx, gy, 1, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+
+  // Vignette
+  const diag = Math.sqrt(w*w + h*h) / 2;
+  const vig = ctx.createRadialGradient(w/2, h/2, diag*0.3, w/2, h/2, diag);
+  vig.addColorStop(0, 'transparent');
+  vig.addColorStop(1, 'rgba(0,0,0,0.4)');
+  ctx.fillStyle = vig;
+  ctx.fillRect(0, 0, w, h);
+}
+
+function drawCross(t) {
+  const w = canvas.width, h = canvas.height, s = sf();
+  ctx.save();
+  ctx.globalAlpha = 0.04;
+  ctx.strokeStyle = t.accent;
+  ctx.lineWidth = 3 * s;
+  ctx.lineCap = 'round';
+  const cx = w * 0.85, cy = h * 0.18, arm = 50 * s;
+  ctx.beginPath(); ctx.moveTo(cx, cy - 30*s); ctx.lineTo(cx, cy + arm*1.8); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(cx - arm, cy + arm*0.3); ctx.lineTo(cx + arm, cy + arm*0.3); ctx.stroke();
+  ctx.restore();
+}
+
+// ── CTA pill at bottom ────────────────────────────────────
+
+function drawCTA(t, url, s) {
+  const w = canvas.width, h = canvas.height;
+  const pillW = Math.min(280*s, w*0.6);
+  const pillH = 42 * s;
+  const pillX = (w - pillW) / 2;
+  const pillY = h - 80 * s;
+
+  roundRect(pillX, pillY, pillW, pillH, pillH / 2);
+  const g = ctx.createLinearGradient(pillX, pillY, pillX + pillW, pillY);
+  g.addColorStop(0, t.accent);
+  g.addColorStop(1, t.accentSoft);
+  ctx.fillStyle = g;
+  ctx.globalAlpha = 0.2;
+  ctx.fill();
+  ctx.globalAlpha = 1;
+  ctx.strokeStyle = t.accentSoft;
+  ctx.lineWidth = 1.5 * s;
+  ctx.stroke();
+
+  ctx.textAlign = 'center';
+  ctx.fillStyle = t.textPrimary;
+  ctx.font = `600 ${16*s}px Inter, sans-serif`;
+  ctx.fillText(url, w/2, pillY + pillH/2 + 5.5*s);
+
+  ctx.font = `400 ${13*s}px Inter, sans-serif`;
+  ctx.fillStyle = t.textSecondary;
+  ctx.fillText('🙏  Pray with us at', w/2, pillY - 16*s);
+}
+
+// ══════════════════════════════════════════════════════════
+// TEMPLATE: Brand Promo
+// ══════════════════════════════════════════════════════════
+
+function renderBrand(t) {
+  const w = canvas.width, h = canvas.height, s = sf();
+  const pad = 80 * s;
+
+  drawBackground(t);
+  drawCross(t);
+
+  const contentW = w - pad * 2;
+  const headline = document.getElementById('headlineInput').value.trim();
+  const subtext  = document.getElementById('subtextInput').value.trim();
+
+  ctx.textAlign = 'center';
+
+  // Pre-measure
+  ctx.font = `600 ${34*s}px Inter, sans-serif`;
+  const headLines = wrapText(headline, contentW);
+  let subLines = [];
+  if (subtext) { ctx.font = `400 ${20*s}px Inter, sans-serif`; subLines = wrapText(subtext, contentW * 0.85); }
+
+  const gap = 20 * s;
+  const labelH  = 16 * s;
+  const titleH  = 72 * s;
+  const divH    = 2 * s;
+  const headH   = headLines.length * 44 * s;
+  const subH    = subLines.length * 30 * s;
+  const ctaZone = 130 * s;
+  const total   = labelH + gap + titleH + gap + divH + gap + headH + gap + subH;
+  let y = Math.max(60*s, (h - ctaZone - total) / 2);
+
+  // ── • INTERCEDE ──
+  ctx.font = `700 ${12*s}px Inter, sans-serif`;
+  const labelText = 'INTERCEDE';
+  const spacing = 3 * s;
+  // measure spaced label width
+  let labelTotalW = 0;
+  for (const ch of labelText) labelTotalW += ctx.measureText(ch).width;
+  labelTotalW += spacing * (labelText.length - 1);
+
+  const dotR = 5 * s;
+  const dotX = w/2 - labelTotalW/2 - 16*s;
+  const dotY = y + labelH/2;
+
+  ctx.fillStyle = t.accent;
+  ctx.beginPath(); ctx.arc(dotX, dotY, dotR, 0, Math.PI*2); ctx.fill();
+  ctx.save();
+  ctx.shadowColor = t.accent;
+  ctx.shadowBlur = 16*s;
+  ctx.beginPath(); ctx.arc(dotX, dotY, dotR, 0, Math.PI*2); ctx.fill();
+  ctx.restore();
+
+  ctx.fillStyle = t.textMuted;
+  ctx.font = `700 ${12*s}px Inter, sans-serif`;
+  drawSpacedText(labelText, w/2 + 4*s, y + labelH/2 + 4*s, spacing);
+
+  y += labelH + gap;
+
+  // ── "Intercede Now" ──
+  ctx.font = `600 ${72*s}px 'Playfair Display', Georgia, serif`;
+  const tg = ctx.createLinearGradient(pad, y, w-pad, y);
+  tg.addColorStop(0, t.textPrimary);
+  tg.addColorStop(0.5, '#ffffff');
+  tg.addColorStop(1, t.accent);
+  ctx.fillStyle = tg;
+  ctx.fillText('Intercede Now', w/2, y + titleH * 0.78);
+
+  y += titleH + gap;
+
+  // Divider
+  ctx.strokeStyle = t.accentSoft;
+  ctx.lineWidth = 2*s;
+  ctx.beginPath(); ctx.moveTo(w/2 - 40*s, y); ctx.lineTo(w/2 + 40*s, y); ctx.stroke();
+
+  y += divH + gap;
+
+  // Headline
+  ctx.font = `600 ${34*s}px Inter, sans-serif`;
+  ctx.fillStyle = t.textPrimary;
+  for (const line of headLines) { ctx.fillText(line, w/2, y); y += 44*s; }
+
+  y += gap;
+
+  // Sub-text
+  if (subLines.length > 0) {
+    ctx.font = `400 ${20*s}px Inter, sans-serif`;
+    ctx.fillStyle = t.textSecondary;
+    for (const line of subLines) { ctx.fillText(line, w/2, y); y += 30*s; }
+  }
+
+  drawCTA(t, document.getElementById('ctaInput').value.trim(), s);
+}
+
+// ══════════════════════════════════════════════════════════
+// TEMPLATE: Verse Focus
+// ══════════════════════════════════════════════════════════
+
+function renderVerse(t) {
+  const w = canvas.width, h = canvas.height, s = sf();
+  const pad = 80 * s;
+
+  drawBackground(t);
+  drawCross(t);
+
+  const contentW = w - pad * 2;
+  const headline = document.getElementById('headlineInput').value.trim();
+  const subtext  = document.getElementById('subtextInput').value.trim();
+  const verse    = document.getElementById('verseInput').value.trim();
+  const verseRef = document.getElementById('verseRefInput').value.trim();
+
+  ctx.textAlign = 'center';
+
+  // Top label
+  ctx.fillStyle = t.textMuted;
+  ctx.font = `700 ${11*s}px Inter, sans-serif`;
+  drawSpacedText('INTERCEDE NOW', w/2, 56*s, 3*s);
+
+  ctx.strokeStyle = t.accentSoft;
+  ctx.lineWidth = 1.5*s;
+  ctx.beginPath(); ctx.moveTo(w/2 - 30*s, 72*s); ctx.lineTo(w/2 + 30*s, 72*s); ctx.stroke();
+
+  // Verse card sizing
+  const innerPad = 40 * s;
+  const cardX = pad - 10*s;
+  const cardW = contentW + 20*s;
+  ctx.font = `italic 500 ${28*s}px 'Playfair Display', Georgia, serif`;
+  const vLines = wrapText(verse, cardW - innerPad*2);
+  const vBlockH = vLines.length * 42*s;
+  const cardH = vBlockH + 120*s;
+
+  // Text below card
+  ctx.font = `600 ${30*s}px Inter, sans-serif`;
+  const headLines = wrapText(headline, contentW);
+  let subLines = [];
+  if (subtext) { ctx.font = `400 ${18*s}px Inter, sans-serif`; subLines = wrapText(subtext, contentW*0.85); }
+
+  const belowH = headLines.length * 40*s + 20*s + subLines.length * 28*s;
+  const totH = cardH + 56*s + belowH;
+  const ctaZone = 130*s;
+  const topZ = 90*s;
+  const cardY = Math.max(topZ, (h - ctaZone - totH) / 2 + topZ * 0.3);
+
+  // Card bg
+  roundRect(cardX, cardY, cardW, cardH, 16*s);
+  ctx.fillStyle = t.cardBg; ctx.fill();
+  ctx.strokeStyle = t.cardBorder; ctx.lineWidth = 1; ctx.stroke();
+
+  // Left accent
+  roundRect(cardX, cardY + 8*s, 3*s, cardH - 16*s, 2);
+  ctx.fillStyle = t.accent; ctx.fill();
+
+  // Verse text
+  let vy = cardY + innerPad + 20*s;
+  ctx.fillStyle = t.gold;
+  ctx.font = `italic 500 ${28*s}px 'Playfair Display', Georgia, serif`;
+  for (const line of vLines) { ctx.fillText(line, w/2, vy); vy += 42*s; }
+
+  vy += 16*s;
+  ctx.font = `500 ${16*s}px Inter, sans-serif`;
+  ctx.fillStyle = t.textSecondary;
+  ctx.fillText(`— ${verseRef}`, w/2, vy);
+
+  // Headline below
+  let y = cardY + cardH + 56*s;
+  ctx.font = `600 ${30*s}px Inter, sans-serif`;
+  ctx.fillStyle = t.textPrimary;
+  for (const line of headLines) { ctx.fillText(line, w/2, y); y += 40*s; }
+
+  y += 16*s;
+  if (subLines.length > 0) {
+    ctx.font = `400 ${18*s}px Inter, sans-serif`;
+    ctx.fillStyle = t.textSecondary;
+    for (const line of subLines) { ctx.fillText(line, w/2, y); y += 28*s; }
+  }
+
+  drawCTA(t, document.getElementById('ctaInput').value.trim(), s);
+}
+
+// ══════════════════════════════════════════════════════════
+// TEMPLATE: Headline + Prayer
+// ══════════════════════════════════════════════════════════
+
+function renderHeadline(t) {
+  const w = canvas.width, h = canvas.height, s = sf();
+  const pad = 80 * s;
+
+  drawBackground(t);
+  drawCross(t);
+
+  const contentW = w - pad * 2;
+  const headline = document.getElementById('headlineInput').value.trim();
+  const subtext  = document.getElementById('subtextInput').value.trim();
+  const verse    = document.getElementById('verseInput').value.trim();
+  const verseRef = document.getElementById('verseRefInput').value.trim();
+
+  ctx.textAlign = 'center';
+
+  // Chip
+  const chipW = 180*s, chipH = 32*s;
+  const chipX = (w - chipW)/2, chipY = 40*s;
+  roundRect(chipX, chipY, chipW, chipH, chipH/2);
+  ctx.fillStyle = t.cardBg; ctx.fill();
+  ctx.strokeStyle = t.accentSoft; ctx.lineWidth = 1; ctx.stroke();
+
+  ctx.fillStyle = t.accent;
+  ctx.font = `700 ${10*s}px Inter, sans-serif`;
+  drawSpacedText('INTERCEDE NOW', w/2, chipY + chipH/2 + 3.5*s, 2*s);
+
+  let y = chipY + chipH + 40*s;
+
+  // TODAY'S HEADLINE
+  ctx.fillStyle = t.accent;
+  ctx.font = `700 ${11*s}px Inter, sans-serif`;
+  drawSpacedText("TODAY'S HEADLINE", w/2, y, 2*s);
+  y += 36*s;
+
+  // Headline
+  ctx.font = `600 ${32*s}px Inter, sans-serif`;
+  ctx.fillStyle = t.textPrimary;
+  const headLines = wrapText(headline, contentW);
+  for (const line of headLines) { ctx.fillText(line, w/2, y); y += 42*s; }
+  y += 28*s;
+
+  // INTERCESSORY PRAYER
+  ctx.fillStyle = t.accent;
+  ctx.font = `700 ${11*s}px Inter, sans-serif`;
+  drawSpacedText('INTERCESSORY PRAYER', w/2, y, 2*s);
+  y += 30*s;
+
+  // Prayer card
+  const prayerText = subtext || 'Enter a prayer in the Sub-text field.';
+  ctx.font = `300 ${20*s}px Inter, sans-serif`;
+  const pLines = wrapText(prayerText, contentW * 0.88);
+  const pH = pLines.length * 32*s + 50*s;
+  const cX = pad - 10*s, cW = contentW + 20*s;
+
+  roundRect(cX, y - 10*s, cW, pH, 12*s);
+  ctx.fillStyle = t.verseBg; ctx.fill();
+  ctx.strokeStyle = t.cardBorder; ctx.lineWidth = 1; ctx.stroke();
+
+  roundRect(cX, y - 2*s, 3*s, pH - 16*s, 2);
+  ctx.fillStyle = t.accent; ctx.fill();
+
+  y += 24*s;
+  ctx.fillStyle = t.textPrimary;
+  ctx.font = `300 ${20*s}px Inter, sans-serif`;
+  for (const line of pLines) { ctx.fillText(line, w/2, y); y += 32*s; }
+
+  // Verse
+  y += 30*s;
+  if (verse) {
+    ctx.font = `italic 500 ${18*s}px 'Playfair Display', Georgia, serif`;
+    ctx.fillStyle = t.gold;
+    const vL = wrapText(verse, contentW * 0.8);
+    for (const line of vL) { ctx.fillText(line, w/2, y); y += 28*s; }
+    y += 8*s;
+    ctx.font = `500 ${14*s}px Inter, sans-serif`;
+    ctx.fillStyle = t.textSecondary;
+    ctx.fillText(`— ${verseRef}`, w/2, y);
+  }
+
+  drawCTA(t, document.getElementById('ctaInput').value.trim(), s);
+}
+
+// ── Generate, Download, Copy ──────────────────────────────
+
+function generate() {
+  try {
+    const template = document.getElementById('templateSelect').value;
+    const ratio    = document.getElementById('ratioSelect').value;
+    const theme    = document.getElementById('themeSelect').value;
+
+    const dim = RATIOS[ratio];
+    canvas.width  = dim.w;
+    canvas.height = dim.h;
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    const t = THEMES[theme];
+    if (template === 'brand')         renderBrand(t);
+    else if (template === 'verse')    renderVerse(t);
+    else if (template === 'headline') renderHeadline(t);
+  } catch (err) {
+    console.error('Generate error:', err);
+  }
+}
+
+function downloadPNG() {
+  const link = document.createElement('a');
+  link.download = `intercede-now-promo-${Date.now()}.png`;
+  link.href = canvas.toDataURL('image/png');
+  link.click();
+}
+
+async function copyToClipboard() {
+  try {
+    const blob = await new Promise(r => canvas.toBlob(r, 'image/png'));
+    await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]);
+    const btn = document.getElementById('copyBtn');
+    const orig = btn.textContent;
+    btn.textContent = '✅ Copied!';
+    setTimeout(() => btn.textContent = orig, 2000);
+  } catch (err) {
+    alert('Could not copy — use Download instead.');
+  }
+}
+
+// ── Event wiring ──────────────────────────────────────────
+
+document.getElementById('generateBtn').addEventListener('click', generate);
+document.getElementById('downloadBtn').addEventListener('click', downloadPNG);
+document.getElementById('copyBtn').addEventListener('click', copyToClipboard);
+
+['templateSelect', 'ratioSelect', 'themeSelect', 'headlineInput', 'subtextInput', 'verseInput', 'verseRefInput', 'ctaInput'].forEach(id => {
+  document.getElementById(id).addEventListener('input', generate);
+  document.getElementById(id).addEventListener('change', generate);
+});
+
+document.fonts.ready.then(() => generate());
+</script>
+
+</body>
+</html>
