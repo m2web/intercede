@@ -456,12 +456,12 @@ function drawCross(t) {
 
 // ── CTA pill at bottom ────────────────────────────────────
 
-function drawCTA(t, url, s) {
+function drawCTA(t, url, s, customPillY) {
   const w = canvas.width, h = canvas.height;
   const pillW = Math.min(280*s, w*0.6);
   const pillH = 42 * s;
   const pillX = (w - pillW) / 2;
-  const pillY = h - 80 * s;
+  const pillY = customPillY !== undefined ? customPillY : h - 80 * s;
 
   roundRect(pillX, pillY, pillW, pillH, pillH / 2);
   const g = ctx.createLinearGradient(pillX, pillY, pillX + pillW, pillY);
@@ -511,12 +511,13 @@ function renderBrand(t) {
   const gap = 20 * s;
   const labelH  = 16 * s;
   const titleH  = 72 * s;
-  const divH    = 2 * s;
   const headH   = headLines.length * 44 * s;
   const subH    = subLines.length * 30 * s;
-  const ctaZone = 130 * s;
-  const total   = labelH + gap + titleH + gap + divH + gap + headH + gap + subH;
-  let y = Math.max(60*s, (h - ctaZone - total) / 2);
+  const ctaGap  = 40 * s;
+  const ctaH    = 16*s + 42*s;  // "Pray with us at" label + pill height
+  const titleGap = 70 * s; // space between title area and headline baseline
+  const total   = labelH + gap + titleH + titleGap + headH + gap + subH + ctaGap + ctaH;
+  let y = Math.max(60*s, (h - total) / 2);
 
   // ── • INTERCEDE ──
   ctx.font = `700 ${12*s}px Inter, sans-serif`;
@@ -554,14 +555,16 @@ function renderBrand(t) {
   ctx.fillStyle = tg;
   ctx.fillText('Intercede Now', w/2, y + titleH * 0.78);
 
-  y += titleH + gap;
+  y += titleH;
 
-  // Divider
+  // Divider — visually centered between title bottom and headline top
+  // Title visual bottom ~7*s above y; headline visual top ~27*s above baseline
+  const divY = y + 18 * s;
   ctx.strokeStyle = t.accentSoft;
-  ctx.lineWidth = 2*s;
-  ctx.beginPath(); ctx.moveTo(w/2 - 40*s, y); ctx.lineTo(w/2 + 40*s, y); ctx.stroke();
+  ctx.lineWidth = 2 * s;
+  ctx.beginPath(); ctx.moveTo(w/2 - 40*s, divY); ctx.lineTo(w/2 + 40*s, divY); ctx.stroke();
 
-  y += divH + gap;
+  y += titleGap;
 
   // Headline
   ctx.font = `600 ${34*s}px Inter, sans-serif`;
@@ -577,7 +580,8 @@ function renderBrand(t) {
     for (const line of subLines) { ctx.fillText(line, w/2, y); y += 30*s; }
   }
 
-  drawCTA(t, document.getElementById('ctaInput').value.trim(), s);
+  const ctaPillY = Math.min(y + ctaGap + 16*s, h - 80*s);
+  drawCTA(t, document.getElementById('ctaInput').value.trim(), s, ctaPillY);
 }
 
 // ══════════════════════════════════════════════════════════
