@@ -14,8 +14,8 @@ logger = logging.getLogger(__name__)
 
 # Ordered by preference — feeds most likely to work from data-center IPs first.
 _RSS_FEEDS = [
-    ("BBC News", "https://feeds.bbci.co.uk/news/rss.xml"),
     ("NPR News", "https://feeds.npr.org/1001/rss.xml"),
+    ("BBC News", "https://feeds.bbci.co.uk/news/rss.xml"),
     ("Google News", "https://news.google.com/rss?hl=en-US&gl=US&ceid=US:en"),
 ]
 
