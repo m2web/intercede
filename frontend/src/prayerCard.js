@@ -2,7 +2,7 @@
  * prayerCard.js — Renders a single ESV verse + reflection + prayer card.
  */
 
-export function createPrayerCard(item, index) {
+export function createPrayerCard(item) {
   const card = document.createElement('div');
   card.className = 'prayer-card';
 
@@ -16,7 +16,7 @@ export function createPrayerCard(item, index) {
   }
 
   card.innerHTML = `
-    <div class="card-label">Intercessory Prayer ${index + 1}</div>
+    <div class="card-label">Intercessory Prayer</div>
     ${verseHtml}
     ${item.reflection ? `<p class="reflection">${item.reflection}</p>` : ''}
     <p class="prayer-text">${item.prayer || ''}</p>

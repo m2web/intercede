@@ -164,8 +164,8 @@ function renderPrayers(prayers) {
   prayers.forEach((item, i) => {
     const block = document.createElement('div');
     block.className = 'prayer-block';
-    block.appendChild(createNewsCard(item, i));
-    block.appendChild(createPrayerCard(item, i));
+    block.appendChild(createNewsCard(item));
+    block.appendChild(createPrayerCard(item));
     grid.appendChild(block);
   });
 

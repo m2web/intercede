@@ -2,7 +2,7 @@
  * newsCard.js — Renders a single news headline card.
  */
 
-export function createNewsCard(item, index) {
+export function createNewsCard(item) {
     const card = document.createElement('div');
     card.className = 'news-card';
 
@@ -11,7 +11,7 @@ export function createNewsCard(item, index) {
         : item.title;
 
     card.innerHTML = `
-    <div class="card-label">News ${index + 1}</div>
+    <div class="card-label">News</div>
     <h2>${titleHtml}</h2>
     <div class="news-meta">
       <span class="source">${item.source || 'Google News'}</span>
