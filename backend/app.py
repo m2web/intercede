@@ -14,6 +14,7 @@ from dotenv import load_dotenv
 
 import news_service
 import prayer_service
+import storage_service
 
 load_dotenv()
 
@@ -86,7 +87,11 @@ def get_prayers():
             raise HTTPException(status_code=503, detail="Could not fetch news headlines.")
         logger.info("Fetched %d headlines, generating prayers…", len(headlines))
         prayers = prayer_service.generate_prayers(headlines)
-        response = {"prayers": prayers}
+
+        # Automatically record generated prayers to daily JSON file
+        batch = storage_service.record_prayers(prayers, model=prayer_service.get_model())
+        recorded_prayers = batch.get("prayers", prayers)
+        response = {"prayers": recorded_prayers}
 
         # Store in cache
         _prayer_cache = response
@@ -99,6 +104,15 @@ def get_prayers():
     except Exception as e:
         logger.exception("Unhandled error in get_prayers")
         raise HTTPException(status_code=500, detail=f"Error generating prayers: {str(e)}")
+
+
+@app.get("/api/prayers/daily")
+def get_daily_prayers_endpoint(date: str | None = None):
+    """
+    Retrieve recorded prayer batches for a given date (YYYY-MM-DD).
+    Defaults to today if no date is provided.
+    """
+    return storage_service.get_daily_prayers(date)
 
 
 if __name__ == "__main__":

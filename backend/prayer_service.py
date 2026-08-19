@@ -13,6 +13,11 @@ load_dotenv()
 _client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 _model = os.getenv("OPENAI_MODEL", "gpt-5-mini")
 
+
+def get_model() -> str:
+    """Returns the configured model name."""
+    return _model
+
 SYSTEM_PROMPT = """You are a Reformed Christian minister helping God's people intercede for the world.
 Be concise. Each prayer object should be brief and focused.
 
