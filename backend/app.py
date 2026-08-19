@@ -7,7 +7,8 @@ import logging
 import os
 import time
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Header, Query, Response, Security
+from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from dotenv import load_dotenv
@@ -20,6 +21,17 @@ load_dotenv()
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+# Admin secret key for private admin endpoints (optional in development, recommended in production)
+ADMIN_KEY = os.getenv("ADMIN_KEY", "")
+
+
+def _verify_admin_access(key: str | None, x_admin_key: str | None):
+    expected_key = os.getenv("ADMIN_KEY", "").strip()
+    if expected_key:
+        provided = (key or x_admin_key or "").strip()
+        if provided != expected_key:
+            raise HTTPException(status_code=403, detail="Forbidden: Invalid admin credentials.")
 
 # ── In-memory prayer cache (30-minute TTL) ─────────────────
 CACHE_TTL_SECONDS = 30 * 60  # 30 minutes
@@ -104,6 +116,72 @@ def get_prayers():
     except Exception as e:
         logger.exception("Unhandled error in get_prayers")
         raise HTTPException(status_code=500, detail=f"Error generating prayers: {str(e)}")
+
+
+@app.get("/api/records", include_in_schema=False)
+def get_recorded_batches(
+    key: str | None = Query(None),
+    x_admin_key: str | None = Header(None),
+):
+    """
+    Private endpoint: List all recorded prayer JSON batches stored on the server.
+    """
+    _verify_admin_access(key, x_admin_key)
+    records = storage_service.list_records()
+    return {
+        "count": len(records),
+        "records": records,
+    }
+
+
+@app.get("/api/records/export.zip", include_in_schema=False)
+def export_all_records_zip(
+    key: str | None = Query(None),
+    x_admin_key: str | None = Header(None),
+):
+    """
+    Private endpoint: Download all recorded prayer JSON files as a single ZIP archive.
+    """
+    _verify_admin_access(key, x_admin_key)
+    zip_bytes = storage_service.create_zip_archive()
+    if not zip_bytes:
+        raise HTTPException(status_code=404, detail="No recorded prayer files found to export.")
+
+    return Response(
+        content=zip_bytes,
+        media_type="application/zip",
+        headers={
+            "Content-Disposition": "attachment; filename=intercede_prayers_export.zip"
+        },
+    )
+
+
+@app.get("/api/records/{filename}", include_in_schema=False)
+def get_single_record(
+    filename: str,
+    download: bool = False,
+    key: str | None = Query(None),
+    x_admin_key: str | None = Header(None),
+):
+    """
+    Private endpoint: View or download a specific recorded JSON file by its filename.
+    """
+    _verify_admin_access(key, x_admin_key)
+    record_path = storage_service.get_record_path(filename)
+    if not record_path:
+        raise HTTPException(status_code=404, detail=f"Record file '{filename}' not found.")
+
+    if download:
+        return FileResponse(
+            record_path,
+            media_type="application/json",
+            filename=os.path.basename(record_path),
+        )
+
+    data = storage_service.get_record(filename)
+    if data is None:
+        raise HTTPException(status_code=404, detail=f"Could not read record file '{filename}'.")
+    return data
 
 
 if __name__ == "__main__":
