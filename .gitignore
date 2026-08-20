@@ -14,3 +14,7 @@ frontend/.env
 .vscode/
 .idea/
 *.swp
+
+# Private docs
+HOWTO_GET_PRAYER_DATA.md
+
